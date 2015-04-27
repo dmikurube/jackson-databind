@@ -41,13 +41,13 @@ public class BeanDeserializerFactory
     private final static Class<?>[] INIT_CAUSE_PARAMS = new Class<?>[] { Throwable.class };
 
     private final static Class<?>[] NO_VIEWS = new Class<?>[0];
-    
+
     /*
     /**********************************************************
     /* Life-cycle
     /**********************************************************
      */
-    
+
     /**
      * Globally shareable thread-safe instance which has no additional custom deserializers
      * registered
@@ -58,7 +58,7 @@ public class BeanDeserializerFactory
     public BeanDeserializerFactory(DeserializerFactoryConfig config) {
         super(config);
     }
-    
+
     /**
      * Method used by module registration functionality, to construct a new bean
      * deserializer factory
@@ -83,7 +83,7 @@ public class BeanDeserializerFactory
         }
         return new BeanDeserializerFactory(config);
     }
-    
+
     /*
     /**********************************************************
     /* DeserializerFactory API implementation
@@ -154,7 +154,7 @@ public class BeanDeserializerFactory
     	BeanDescription builderDesc = ctxt.getConfig().introspectForBuilder(builderType);
     	return buildBuilderBasedDeserializer(ctxt, valueType, builderDesc);
     }
-    
+
     /**
      * Method called by {@link BeanDeserializerFactory} to see if there might be a standard
      * deserializer registered for given type.
@@ -176,7 +176,7 @@ public class BeanDeserializerFactory
         }
         return deser;
     }
-    
+
     protected JavaType materializeAbstractType(DeserializationContext ctxt,
             JavaType type, BeanDescription beanDesc)
         throws JsonMappingException
@@ -192,7 +192,7 @@ public class BeanDeserializerFactory
         }
         return null;
     }
-    
+
     /*
     /**********************************************************
     /* Public construction method beyond DeserializerFactory API:
@@ -223,7 +223,7 @@ public class BeanDeserializerFactory
         // managed/back reference fields/setters need special handling... first part
         addReferenceProperties(ctxt, beanDesc, builder);
         addInjectables(ctxt, beanDesc, builder);
-        
+
         final DeserializationConfig config = ctxt.getConfig();
         // [JACKSON-440]: update builder now that all information is in?
         if (_factoryConfig.hasDeserializerModifiers()) {
@@ -250,7 +250,7 @@ public class BeanDeserializerFactory
         }
         return (JsonDeserializer<Object>) deserializer;
     }
-    
+
     /**
      * Method for constructing a bean deserializer that uses specified
      * intermediate Builder for binding data, and construction of the
@@ -271,7 +271,7 @@ public class BeanDeserializerFactory
          // And then "with methods" for deserializing from JSON Object
         addBeanProps(ctxt, builderDesc, builder);
         addObjectIdReader(ctxt, builderDesc, builder);
-        
+
         // managed/back reference fields/setters need special handling... first part
         addReferenceProperties(ctxt, builderDesc, builder);
         addInjectables(ctxt, builderDesc, builder);
@@ -279,7 +279,7 @@ public class BeanDeserializerFactory
         JsonPOJOBuilder.Value builderConfig = builderDesc.findPOJOBuilderConfig();
         final String buildMethodName = (builderConfig == null) ?
                 "build" : builderConfig.buildMethodName;
-        
+
         // and lastly, find build method to use:
         AnnotatedMethod buildMethod = builderDesc.findMethod(buildMethodName, null);
         if (buildMethod != null) { // note: can't yet throw error; may be given build method
@@ -305,7 +305,7 @@ public class BeanDeserializerFactory
         }
         return (JsonDeserializer<Object>) deserializer;
     }
-    
+
     protected void addObjectIdReader(DeserializationContext ctxt,
             BeanDescription beanDesc, BeanDeserializerBuilder builder)
         throws JsonMappingException
@@ -342,7 +342,7 @@ public class BeanDeserializerFactory
         builder.setObjectIdReader(ObjectIdReader.construct(idType,
                 objectIdInfo.getPropertyName(), gen, deser, idProp, resolver));
     }
-    
+
     @SuppressWarnings("unchecked")
     public JsonDeserializer<Object> buildThrowableDeserializer(DeserializationContext ctxt,
             JavaType type, BeanDescription beanDesc)
@@ -391,7 +391,7 @@ public class BeanDeserializerFactory
             }
         }
         JsonDeserializer<?> deserializer = builder.build();
-        
+
         /* At this point it ought to be a BeanDeserializer; if not, must assume
          * it's some other thing that can handle deserialization ok...
          */
@@ -424,7 +424,7 @@ public class BeanDeserializerFactory
             BeanDescription beanDesc) {
         return new BeanDeserializerBuilder(beanDesc, ctxt.getConfig());
     }
-    
+
     /**
      * Method called to figure out settable properties for the
      * bean deserializer to use.
@@ -439,7 +439,7 @@ public class BeanDeserializerFactory
         final SettableBeanProperty[] creatorProps =
                 builder.getValueInstantiator().getFromObjectArguments(ctxt.getConfig());
         final boolean isConcrete = !beanDesc.getType().isAbstract();
-        
+
         // Things specified as "ok to ignore"? [JACKSON-77]
         AnnotationIntrospector intr = ctxt.getAnnotationIntrospector();
         boolean ignoreAny = false;
@@ -451,7 +451,7 @@ public class BeanDeserializerFactory
             }
         }
         // Or explicit/implicit definitions?
-        Set<String> ignored = ArrayBuilders.arrayToSet(intr.findPropertiesToIgnore(beanDesc.getClassInfo()));        
+        Set<String> ignored = ArrayBuilders.arrayToSet(intr.findPropertiesToIgnore(beanDesc.getClassInfo()));
         for (String propName : ignored) {
             builder.addIgnorable(propName);
         }
@@ -485,9 +485,20 @@ public class BeanDeserializerFactory
                 propDefs = mod.updateProperties(ctxt.getConfig(), beanDesc, propDefs);
             }
         }
-        
+
         // At which point we still have all kinds of properties; not all with mutators:
         for (BeanPropertyDefinition propDef : propDefs) {
+            /*
+            System.out.println("propDef.getClass().getName() = " + propDef.getClass().getName());
+            System.out.println("annotation introspector = " + com.fasterxml.jackson.databind.introspect.POJOPropertyBuilder.class.cast(propDef)._annotationIntrospector.getClass().getName());
+            if (com.fasterxml.jackson.databind.introspect.POJOPropertyBuilder.class.cast(propDef)._annotationIntrospector instanceof com.fasterxml.jackson.databind.introspect.AnnotationIntrospectorPair) {
+                System.out.println("  primary = " + com.fasterxml.jackson.databind.introspect.AnnotationIntrospectorPair.class.cast(com.fasterxml.jackson.databind.introspect.POJOPropertyBuilder.class.cast(propDef)._annotationIntrospector)._primary.getClass().getName());
+                System.out.println("secondary = " + com.fasterxml.jackson.databind.introspect.AnnotationIntrospectorPair.class.cast(com.fasterxml.jackson.databind.introspect.POJOPropertyBuilder.class.cast(propDef)._annotationIntrospector)._secondary.getClass().getName());
+            }
+            System.out.println("propDef.getName() = " + propDef.getName());
+            System.out.println("propDef.getWrapperName() = " + propDef.getWrapperName());
+            System.out.println("propDef.getFullName() = " + propDef.getFullName());
+            */
             SettableBeanProperty prop = null;
             /* 18-Oct-2013, tatu: Although constructor parameters have highest precedence,
              *   we need to do linkage (as per [Issue#318]), and so need to start with
@@ -520,10 +531,15 @@ public class BeanDeserializerFactory
                  */
                 // but let's call a method just to allow custom builders to be aware...
                 final String name = propDef.getName();
+                final PropertyName wrapperName = propDef.getWrapperName();
                 CreatorProperty cprop = null;
                 if (creatorProps != null) {
                     for (SettableBeanProperty cp : creatorProps) {
                         if (name.equals(cp.getName())) {
+                            cprop = (CreatorProperty) cp;
+                            break;
+                        }
+                        if (wrapperName != null && wrapperName.equals(cp.getWrapperName())) {
                             cprop = (CreatorProperty) cp;
                             break;
                         }
@@ -540,7 +556,7 @@ public class BeanDeserializerFactory
                 builder.addCreatorProperty(cprop);
                 continue;
             }
-            
+
             if (prop != null) {
                 Class<?>[] views = propDef.findViews();
                 if (views == null) {
@@ -555,7 +571,7 @@ public class BeanDeserializerFactory
             }
         }
     }
-    
+
     /**
      * Helper method called to filter out explicit ignored properties,
      * as well as properties that have "ignorable types".
@@ -597,7 +613,7 @@ public class BeanDeserializerFactory
         }
         return result;
     }
-    
+
     /**
      * Method that will find if bean has any managed- or back-reference properties,
      * and if so add them to bean, to be linked during resolution phase.
@@ -625,7 +641,7 @@ public class BeanDeserializerFactory
             }
         }
     }
-    
+
     /**
      * Method called locate all members used for value injection (if any),
      * constructor {@link com.fasterxml.jackson.databind.deser.impl.ValueInjector} instances, and add them to builder.
@@ -714,11 +730,12 @@ public class BeanDeserializerFactory
         if (type != t0) {
             property = property.withType(type);
         }
-        
+
         /* First: does the Method specify the deserializer to use?
          * If so, let's use it.
          */
         JsonDeserializer<Object> propDeser = findDeserializerFromAnnotation(ctxt, mutator);
+        // System.out.println("   found?? = " + propDeser);
         type = modifyTypeByAnnotation(ctxt, mutator, type);
         TypeDeserializer typeDeser = type.getTypeHandler();
         SettableBeanProperty prop;
@@ -741,6 +758,9 @@ public class BeanDeserializerFactory
         if(objectIdInfo != null){
             prop.setObjectIdInfo(objectIdInfo);
         }
+        /*
+        System.out.println("!!!!!!??????? " + prop.getName() + " : " + prop.getWrapperName());
+        */
         return prop;
     }
 
@@ -786,7 +806,7 @@ public class BeanDeserializerFactory
 
     /**
      * Helper method used to skip processing for types that we know
-     * can not be (i.e. are never consider to be) beans: 
+     * can not be (i.e. are never consider to be) beans:
      * things like primitives, Arrays, Enums, and proxy types.
      *<p>
      * Note that usually we shouldn't really be getting these sort of
@@ -825,6 +845,6 @@ public class BeanDeserializerFactory
         BeanDescription desc = config.introspectClassAnnotations(type);
         status = config.getAnnotationIntrospector().isIgnorableType(desc.getClassInfo());
         // We default to 'false', i.e. not ignorable
-        return (status == null) ? false : status.booleanValue(); 
+        return (status == null) ? false : status.booleanValue();
     }
 }

@@ -20,7 +20,7 @@ public class POJOPropertyBuilder
      */
     protected final boolean _forSerialization;
 
-    protected final AnnotationIntrospector _annotationIntrospector;
+    public final AnnotationIntrospector _annotationIntrospector;
 
     /**
      * External name of logical property; may change with
@@ -36,9 +36,9 @@ public class POJOPropertyBuilder
     protected final PropertyName _internalName;
 
     protected Linked<AnnotatedField> _fields;
-    
+
     protected Linked<AnnotatedParameter> _ctorParameters;
-    
+
     protected Linked<AnnotatedMethod> _getters;
 
     protected Linked<AnnotatedMethod> _setters;
@@ -68,7 +68,7 @@ public class POJOPropertyBuilder
         _setters = src._setters;
         _forSerialization = src._forSerialization;
     }
-    
+
     /*
     /**********************************************************
     /* Fluent factory methods
@@ -86,7 +86,7 @@ public class POJOPropertyBuilder
         PropertyName newName = _name.withSimpleName(newSimpleName);
         return (newName == _name) ? this : new POJOPropertyBuilder(this, newName);
     }
-    
+
     /*
     /**********************************************************
     /* Comparable implementation: sort alphabetically, except
@@ -173,7 +173,7 @@ public class POJOPropertyBuilder
                 || _anyExplicitNames(_ctorParameters)
                 ;
     }
-    
+
     /*
     /**********************************************************
     /* BeanPropertyDefinition implementation, accessor access
@@ -231,7 +231,7 @@ public class POJOPropertyBuilder
                 }
             }
             /* 30-May-2014, tatu: Three levels of precedence:
-             * 
+             *
              * 1. Regular getters ("getX")
              * 2. Is-getters ("isX")
              * 3. Implicit, possible getters ("x")
@@ -252,7 +252,7 @@ public class POJOPropertyBuilder
         _getters = curr.withoutNext();
         return curr.value;
     }
-    
+
     @Override
     public AnnotatedMethod getSetter()
     {
@@ -282,7 +282,7 @@ public class POJOPropertyBuilder
                 }
             }
             /* 30-May-2014, tatu: Two levels of precedence:
-             * 
+             *
              * 1. Regular setters ("setX(...)")
              * 2. Implicit, possible setters ("x(...)")
              */
@@ -340,7 +340,7 @@ public class POJOPropertyBuilder
         /* Hmmh. Checking for constructor parameters is trickier; for one,
          * we must allow creator and factory method annotations.
          * If this is the case, constructor parameter has the precedence.
-         * 
+         *
          * So, for now, just try finding the first constructor parameter;
          * if none, first factory method. And don't check for dups, if we must,
          * can start checking for them later on.
@@ -362,7 +362,7 @@ public class POJOPropertyBuilder
         }
         return new MemberIterator<AnnotatedParameter>(_ctorParameters);
     }
-    
+
     @Override
     public AnnotatedMember getAccessor()
     {
@@ -426,7 +426,7 @@ public class POJOPropertyBuilder
         }
         return 2;
     }
-    
+
     /*
     /**********************************************************
     /* Implementations of refinement accessors
@@ -486,7 +486,7 @@ public class POJOPropertyBuilder
         });
         return b;
     }
-    
+
     protected String _findDescription() {
         return fromMemberAnnotations(new WithMember<String>() {
             @Override
@@ -513,7 +513,7 @@ public class POJOPropertyBuilder
             }
         });
     }
-    
+
     @Override
     public ObjectIdInfo findObjectIdInfo() {
         return fromMemberAnnotations(new WithMember<ObjectIdInfo>() {
@@ -542,7 +542,7 @@ public class POJOPropertyBuilder
     /* Data aggregation
     /**********************************************************
      */
-    
+
     public void addField(AnnotatedField a, PropertyName name, boolean explName, boolean visible, boolean ignored) {
         _fields = new Linked<AnnotatedField>(a, _fields, name, explName, visible, ignored);
     }
@@ -585,7 +585,7 @@ public class POJOPropertyBuilder
     // // Deprecated variants that do not take 'explName': to be removed in a later version
     // // (but are used at least by 2.3 and earlier versions of Scala module at least so
     // // need to be careful with phasing out if before 3.0)
-    
+
     /**
      * @deprecated Since 2.4 call method that takes additional 'explName' argument, to indicate
      *   whether name of property was provided by annotation (and not derived from accessor name);
@@ -600,7 +600,7 @@ public class POJOPropertyBuilder
     public void addField(AnnotatedField a, String name, boolean explName, boolean visible, boolean ignored) {
         addField(a, _propName(name), explName, visible, ignored);
     }
-    
+
     /**
      * @deprecated Since 2.4 call method that takes additional 'explName' argument, to indicate
      *   whether name of property was provided by annotation (and not derived from accessor name);
@@ -614,7 +614,7 @@ public class POJOPropertyBuilder
     public void addCtor(AnnotatedParameter a, String name, boolean explName, boolean visible, boolean ignored) {
         addCtor(a, _propName(name), explName, visible, ignored);
     }
-    
+
     /**
      * @deprecated Since 2.4 call method that takes additional 'explName' argument, to indicate
      *   whether name of property was provided by annotation (and not derived from accessor name);
@@ -628,7 +628,7 @@ public class POJOPropertyBuilder
     public void addGetter(AnnotatedMethod a, String name, boolean explName, boolean visible, boolean ignored) {
         addGetter(a, _propName(name), explName, visible, ignored);
     }
-    
+
     /**
      * @deprecated Since 2.4 call method that takes additional 'explName' argument, to indicate
      *   whether name of property was provided by annotation (and not derived from accessor name);
@@ -646,7 +646,7 @@ public class POJOPropertyBuilder
     private PropertyName _propName(String simple) {
         return PropertyName.construct(simple, null);
     }
-    
+
     /*
     /**********************************************************
     /* Modifications
@@ -688,13 +688,13 @@ public class POJOPropertyBuilder
 
     /**
      * Mutator that will simply drop any constructor parameters property may have.
-     * 
+     *
      * @since 2.5
      */
     public void removeConstructors() {
         _ctorParameters = null;
     }
-    
+
     /**
      * Method called to trim unnecessary entries, such as implicit
      * getter if there is an explict one available. This is important
@@ -744,7 +744,7 @@ public class POJOPropertyBuilder
         }
         return ann;
     }
-    
+
     private <T> Linked<T> _removeIgnored(Linked<T> node)
     {
         if (node == null) {
@@ -768,7 +768,7 @@ public class POJOPropertyBuilder
         }
         return node.trimByVisibility();
     }
-        
+
     /*
     /**********************************************************
     /* Accessors for aggregate information
@@ -812,7 +812,7 @@ public class POJOPropertyBuilder
         }
         return false;
     }
-    
+
     public boolean anyIgnorals() {
         return _anyIgnorals(_fields)
             || _anyIgnorals(_getters)
@@ -841,7 +841,7 @@ public class POJOPropertyBuilder
         if (l == null) {
             return null;
         }
-        
+
         // 13-Apr-2014, tatu: Start with code similar to existing conflict checks
         if (l.size() > 1) {
             throw new IllegalStateException("Conflicting/ambiguous property name definitions (implicit name '"
@@ -854,11 +854,11 @@ public class POJOPropertyBuilder
         }
         return first.getSimpleName();
     }
-    
+
     /**
      * Method called to find out set of explicit names for accessors
      * bound together due to implicit name.
-     * 
+     *
      * @since 2.4
      */
     public Set<PropertyName> findExplicitNames()
@@ -879,7 +879,7 @@ public class POJOPropertyBuilder
      * multiple distinct explicit names, and the property this builder represents
      * basically needs to be broken apart and replaced by a set of more than
      * one properties.
-     * 
+     *
      * @since 2.4
      */
     public Collection<POJOPropertyBuilder> explode(Collection<PropertyName> newNames)
@@ -905,7 +905,7 @@ public class POJOPropertyBuilder
                 if (!node.isVisible) {
                     continue;
                 }
-                
+
                 throw new IllegalStateException("Conflicting/ambiguous property name definitions (implicit name '"
                         +_name+"'): found multiple explicit names: "
                         +newNames+", but also implicit accessor: "+node);
@@ -933,7 +933,7 @@ public class POJOPropertyBuilder
             }
         }
     }
-    
+
     private Set<PropertyName> _findExplicitNames(Linked<? extends AnnotatedMember> node,
             Set<PropertyName> renamed)
     {
@@ -954,7 +954,7 @@ public class POJOPropertyBuilder
         }
         return renamed;
     }
-    
+
     // For trouble-shooting
     @Override
     public String toString()
@@ -969,7 +969,7 @@ public class POJOPropertyBuilder
         sb.append("]");
         return sb.toString();
     }
-    
+
     /*
     /**********************************************************
     /* Helper methods
@@ -1002,7 +1002,7 @@ public class POJOPropertyBuilder
         }
         return result;
     }
-    
+
     /*
     /**********************************************************
     /* Helper classes
@@ -1020,11 +1020,11 @@ public class POJOPropertyBuilder
         implements Iterator<T>
     {
         private Linked<T> next;
-        
+
         public MemberIterator(Linked<T> first) {
             next = first;
         }
-        
+
         @Override
         public boolean hasNext() {
             return (next != null);
@@ -1042,9 +1042,9 @@ public class POJOPropertyBuilder
         public void remove() {
             throw new UnsupportedOperationException();
         }
-        
+
     }
-    
+
     /**
      * Node used for creating simple linked lists to efficiently store small sets
      * of things.
@@ -1058,7 +1058,7 @@ public class POJOPropertyBuilder
         public final boolean isNameExplicit;
         public final boolean isVisible;
         public final boolean isMarkedIgnored;
-        
+
         public Linked(T v, Linked<T> n,
                 PropertyName name, boolean explName, boolean visible, boolean ignored)
         {
@@ -1077,7 +1077,7 @@ public class POJOPropertyBuilder
                     explName = false;
                 }
             }
-            
+
             isNameExplicit = explName;
             isVisible = visible;
             isMarkedIgnored = ignored;
@@ -1089,21 +1089,21 @@ public class POJOPropertyBuilder
             }
             return new Linked<T>(value, null, name, isNameExplicit, isVisible, isMarkedIgnored);
         }
-        
+
         public Linked<T> withValue(T newValue) {
             if (newValue == value) {
                 return this;
             }
             return new Linked<T>(newValue, next, name, isNameExplicit, isVisible, isMarkedIgnored);
         }
-        
+
         public Linked<T> withNext(Linked<T> newNext) {
             if (newNext == next) {
                 return this;
             }
             return new Linked<T>(value, newNext, name, isNameExplicit, isVisible, isMarkedIgnored);
         }
-        
+
         public Linked<T> withoutIgnored() {
             if (isMarkedIgnored) {
                 return (next == null) ? null : next.withoutIgnored();
@@ -1116,7 +1116,7 @@ public class POJOPropertyBuilder
             }
             return this;
         }
-        
+
         public Linked<T> withoutNonVisible() {
             Linked<T> newNext = (next == null) ? null : next.withoutNonVisible();
             return isVisible ? withNext(newNext) : newNext;
@@ -1154,7 +1154,7 @@ public class POJOPropertyBuilder
             }
             return isVisible ? withNext(null) : newNext;
         }
-        
+
         @Override
         public String toString() {
             String msg = value.toString()+"[visible="+isVisible+",ignore="+isMarkedIgnored

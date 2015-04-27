@@ -44,7 +44,7 @@ public abstract class BeanDeserializerBase
      * annotations during resolution
      * (see {@link #resolve}) and
      * contextualization (see {@link #createContextual})
-     *<p> 
+     *<p>
      * Transient since annotations only used during construction.
      */
     final private transient Annotations _classAnnotations;
@@ -58,7 +58,7 @@ public abstract class BeanDeserializerBase
      * Requested shape from bean class annotations.
      */
     final protected JsonFormat.Shape _serializationShape;
-    
+
     /*
     /**********************************************************
     /* Configuration for creating value instance
@@ -66,18 +66,18 @@ public abstract class BeanDeserializerBase
      */
 
     /**
-     * Object that handles details of constructing initial 
+     * Object that handles details of constructing initial
      * bean value (to which bind data to), unless instance
      * is passed (via updateValue())
      */
     protected final ValueInstantiator _valueInstantiator;
-    
+
     /**
      * Deserializer that is used iff delegate-based creator is
      * to be used for deserializing from JSON Object.
      */
     protected JsonDeserializer<Object> _delegateDeserializer;
-    
+
     /**
      * If the bean needs to be instantiated using constructor
      * or factory method
@@ -145,13 +145,13 @@ public abstract class BeanDeserializerBase
      * on active view used (if any)
      */
     final protected boolean _needViewProcesing;
-    
+
     /**
      * We may also have one or more back reference fields (usually
      * zero or one).
      */
     final protected Map<String, SettableBeanProperty> _backRefs;
-    
+
     /*
     /**********************************************************
     /* Related handlers
@@ -205,10 +205,10 @@ public abstract class BeanDeserializerBase
         super(beanDesc.getType());
 
         AnnotatedClass ac = beanDesc.getClassInfo();
-        _classAnnotations = ac.getAnnotations();       
+        _classAnnotations = ac.getAnnotations();
         _beanType = beanDesc.getType();
         _valueInstantiator = builder.getValueInstantiator();
-        
+
         _beanProperties = properties;
         _backRefs = backRefs;
         _ignorableProps = ignorableProps;
@@ -245,14 +245,14 @@ public abstract class BeanDeserializerBase
     protected BeanDeserializerBase(BeanDeserializerBase src, boolean ignoreAllUnknown)
     {
         super(src._beanType);
-        
+
         _classAnnotations = src._classAnnotations;
         _beanType = src._beanType;
-        
+
         _valueInstantiator = src._valueInstantiator;
         _delegateDeserializer = src._delegateDeserializer;
         _propertyBasedCreator = src._propertyBasedCreator;
-        
+
         _beanProperties = src._beanProperties;
         _backRefs = src._backRefs;
         _ignorableProps = src._ignorableProps;
@@ -260,7 +260,7 @@ public abstract class BeanDeserializerBase
         _anySetter = src._anySetter;
         _injectables = src._injectables;
         _objectIdReader = src._objectIdReader;
-        
+
         _nonStandardCreation = src._nonStandardCreation;
         _unwrappedPropertyHandler = src._unwrappedPropertyHandler;
         _needViewProcesing = src._needViewProcesing;
@@ -268,14 +268,14 @@ public abstract class BeanDeserializerBase
 
         _vanillaProcessing = src._vanillaProcessing;
     }
- 
+
     protected BeanDeserializerBase(BeanDeserializerBase src, NameTransformer unwrapper)
     {
         super(src._beanType);
 
         _classAnnotations = src._classAnnotations;
         _beanType = src._beanType;
-        
+
         _valueInstantiator = src._valueInstantiator;
         _delegateDeserializer = src._delegateDeserializer;
         _propertyBasedCreator = src._propertyBasedCreator;
@@ -311,20 +311,20 @@ public abstract class BeanDeserializerBase
     public BeanDeserializerBase(BeanDeserializerBase src, ObjectIdReader oir)
     {
         super(src._beanType);
-        
+
         _classAnnotations = src._classAnnotations;
         _beanType = src._beanType;
-        
+
         _valueInstantiator = src._valueInstantiator;
         _delegateDeserializer = src._delegateDeserializer;
         _propertyBasedCreator = src._propertyBasedCreator;
-        
+
         _backRefs = src._backRefs;
         _ignorableProps = src._ignorableProps;
         _ignoreAllUnknown = src._ignoreAllUnknown;
         _anySetter = src._anySetter;
         _injectables = src._injectables;
-        
+
         _nonStandardCreation = src._nonStandardCreation;
         _unwrappedPropertyHandler = src._unwrappedPropertyHandler;
         _needViewProcesing = src._needViewProcesing;
@@ -350,20 +350,20 @@ public abstract class BeanDeserializerBase
     public BeanDeserializerBase(BeanDeserializerBase src, HashSet<String> ignorableProps)
     {
         super(src._beanType);
-        
+
         _classAnnotations = src._classAnnotations;
         _beanType = src._beanType;
-        
+
         _valueInstantiator = src._valueInstantiator;
         _delegateDeserializer = src._delegateDeserializer;
         _propertyBasedCreator = src._propertyBasedCreator;
-        
+
         _backRefs = src._backRefs;
         _ignorableProps = ignorableProps;
         _ignoreAllUnknown = src._ignoreAllUnknown;
         _anySetter = src._anySetter;
         _injectables = src._injectables;
-        
+
         _nonStandardCreation = src._nonStandardCreation;
         _unwrappedPropertyHandler = src._unwrappedPropertyHandler;
         _needViewProcesing = src._needViewProcesing;
@@ -373,7 +373,7 @@ public abstract class BeanDeserializerBase
         _objectIdReader = src._objectIdReader;
         _beanProperties = src._beanProperties;
     }
-    
+
     @Override
     public abstract JsonDeserializer<Object> unwrappingDeserializer(NameTransformer unwrapper);
 
@@ -385,7 +385,7 @@ public abstract class BeanDeserializerBase
      * Fluent factory for creating a variant that can handle
      * POJO output as a JSON Array. Implementations may ignore this request
      * if no such input is possible.
-     * 
+     *
      * @since 2.1
      */
     protected abstract BeanDeserializerBase asArrayDeserializer();
@@ -473,7 +473,7 @@ public abstract class BeanDeserializerBase
             if (prop != origProp) {
                 _beanProperties.replace(prop);
             }
-            
+
             /* one more thing: if this property uses "external property" type inclusion
              * (see [JACKSON-453]), it needs different handling altogether
              */
@@ -522,13 +522,13 @@ public abstract class BeanDeserializerBase
             }
             _delegateDeserializer = dd;
         }
-        
+
         if (extTypes != null) {
             _externalTypeIdHandler = extTypes.build();
             // we consider this non-standard, to offline handling
             _nonStandardCreation = true;
         }
-        
+
         _unwrappedPropertyHandler = unwrapped;
         if (unwrapped != null) { // we consider this non-standard, to offline handling
             _nonStandardCreation = true;
@@ -542,7 +542,7 @@ public abstract class BeanDeserializerBase
      * Helper method that can be used to see if specified property is annotated
      * to indicate use of a converter for property value (in case of container types,
      * it is container type itself, not key or content type).
-     * 
+     *
      * @since 2.2
      */
     protected JsonDeserializer<Object> findConvertingDeserializer(DeserializationContext ctxt,
@@ -561,7 +561,7 @@ public abstract class BeanDeserializerBase
         }
         return null;
     }
-    
+
     /**
      * Although most of post-processing is done in resolve(), we only get
      * access to referring property's annotations here; and this is needed
@@ -574,7 +574,7 @@ public abstract class BeanDeserializerBase
             BeanProperty property) throws JsonMappingException
     {
         ObjectIdReader oir = _objectIdReader;
-        
+
         // First: may have an override for Object Id:
         final AnnotationIntrospector intr = ctxt.getAnnotationIntrospector();
         final AnnotatedMember accessor = (property == null || intr == null)
@@ -584,7 +584,7 @@ public abstract class BeanDeserializerBase
             if (objectIdInfo != null) { // some code duplication here as well (from BeanDeserializerFactory)
                 // 2.1: allow modifications by "id ref" annotations as well:
                 objectIdInfo = intr.findObjectReferenceInfo(accessor, objectIdInfo);
-                
+
                 Class<?> implClass = objectIdInfo.getGeneratorType();
                 // Property-based generator is trickier
                 JavaType idType;
@@ -710,14 +710,14 @@ public abstract class BeanDeserializerBase
         }
         return null;
     }
-    
+
     /**
      * Helper method that will handle gruesome details of dealing with properties
      * that have non-static inner class as value...
      */
     protected SettableBeanProperty _resolveInnerClassValuedProperty(DeserializationContext ctxt,
             SettableBeanProperty prop)
-    {            
+    {
         /* Should we encounter a property that has non-static inner-class
          * as value, we need to add some more magic to find the "hidden" constructor...
          */
@@ -759,7 +759,7 @@ public abstract class BeanDeserializerBase
     public Class<?> handledType() {
         return _beanType.getRawClass();
     }
-    
+
     /**
      * Overridden to return true for those instances that are
      * handling value for which Object Identity handling is enabled
@@ -769,7 +769,7 @@ public abstract class BeanDeserializerBase
     public ObjectIdReader getObjectIdReader() {
         return _objectIdReader;
     }
-    
+
     public boolean hasProperty(String propertyName) {
         return _beanProperties.find(propertyName) != null;
     }
@@ -777,11 +777,11 @@ public abstract class BeanDeserializerBase
     public boolean hasViews() {
         return _needViewProcesing;
     }
-    
+
     /**
      * Accessor for checking number of deserialized properties.
      */
-    public int getPropertyCount() { 
+    public int getPropertyCount() {
         return _beanProperties.size();
     }
 
@@ -822,7 +822,7 @@ public abstract class BeanDeserializerBase
      * Accessor for finding properties that represents values to pass
      * through property-based creator method (constructor or
      * factory method)
-     * 
+     *
      * @since 2.0
      */
     public Iterator<SettableBeanProperty> creatorProperties()
@@ -838,12 +838,12 @@ public abstract class BeanDeserializerBase
         // TODO: start matching full name?
         return findProperty(propertyName.getSimpleName());
     }
-    
+
     /**
      * Accessor for finding the property with given name, if POJO
      * has one. Name used is the external name, i.e. name used
      * in external data representation (JSON).
-     * 
+     *
      * @since 2.0
      */
     public SettableBeanProperty findProperty(String propertyName)
@@ -863,7 +863,7 @@ public abstract class BeanDeserializerBase
      * since properties are not directly indexable; however, for most
      * instances difference is not significant as number of properties
      * is low.
-     * 
+     *
      * @since 2.3
      */
     public SettableBeanProperty findProperty(int propertyIndex)
@@ -875,7 +875,7 @@ public abstract class BeanDeserializerBase
         }
         return prop;
     }
-    
+
     /**
      * Method needed by {@link BeanDeserializerFactory} to properly link
      * managed- and back-reference pairs.
@@ -908,7 +908,7 @@ public abstract class BeanDeserializerBase
      *
      * @param original Property to replace
      * @param replacement Property to replace it with
-     * 
+     *
      * @since 2.1
      */
     public void replaceProperty(SettableBeanProperty original,
@@ -1065,18 +1065,23 @@ public abstract class BeanDeserializerBase
     protected Object deserializeFromObjectUsingNonDefault(JsonParser jp,
             DeserializationContext ctxt) throws IOException
     {
+        System.out.println("deserializeFromObjectUsingNonDefault #0");
         if (_delegateDeserializer != null) {
+            System.out.println("deserializeFromObjectUsingNonDefault #1");
             return _valueInstantiator.createUsingDelegate(ctxt,
                     _delegateDeserializer.deserialize(jp, ctxt));
         }
         if (_propertyBasedCreator != null) {
+            System.out.println("deserializeFromObjectUsingNonDefault #2");
             return _deserializeUsingPropertyBased(jp, ctxt);
         }
         // should only occur for abstract types...
         if (_beanType.isAbstract()) {
+            System.out.println("deserializeFromObjectUsingNonDefault #3");
             throw JsonMappingException.from(jp, "Can not instantiate abstract type "+_beanType
                     +" (need to add/enable type information?)");
         }
+        System.out.println("deserializeFromObjectUsingNonDefault #4");
         throw JsonMappingException.from(jp, "No suitable constructor found for type "
                 +_beanType+": can not instantiate from JSON object (missing default constructor or creator, or perhaps need to add/enable type information?)");
     }
@@ -1134,7 +1139,7 @@ public abstract class BeanDeserializerBase
         if (_objectIdReader != null) {
             return deserializeFromObjectId(p, ctxt);
         }
-        
+
         /* Bit complicated if we have delegating creator; may need to use it,
          * or might not...
          */
@@ -1216,7 +1221,7 @@ public abstract class BeanDeserializerBase
             }
             final Object value = deserialize(p, ctxt);
             if (p.nextToken() != JsonToken.END_ARRAY) {
-                throw ctxt.wrongTokenException(p, JsonToken.END_ARRAY, 
+                throw ctxt.wrongTokenException(p, JsonToken.END_ARRAY,
                         "Attempted to unwrap single value array for single '" + _valueClass.getName() + "' value but there was more than a single value in the array");
             }
             return value;
@@ -1240,10 +1245,10 @@ public abstract class BeanDeserializerBase
         }
 
         // TODO: maybe add support for ValueInstantiator, embedded?
-        
+
         return jp.getEmbeddedObject();
     }
-    
+
     /*
     /**********************************************************
     /* Overridable helper methods
@@ -1257,7 +1262,7 @@ public abstract class BeanDeserializerBase
             injector.inject(ctxt, bean);
         }
     }
-    
+
     /**
      * Method called to handle set of one or more unknown properties,
      * stored in their entirety in given {@link TokenBuffer}
@@ -1270,7 +1275,7 @@ public abstract class BeanDeserializerBase
     {
         // First: add closing END_OBJECT as marker
         unknownTokens.writeEndObject();
-        
+
         // note: buffer does NOT have starting START_OBJECT
         JsonParser bufferParser = unknownTokens.asParser();
         while (bufferParser.nextToken() != JsonToken.END_OBJECT) {
@@ -1301,7 +1306,7 @@ public abstract class BeanDeserializerBase
             }
         } else {
             // Unknown: let's call handler method
-            handleUnknownProperty(jp, ctxt, bean, propName);         
+            handleUnknownProperty(jp, ctxt, bean, propName);
         }
     }
 
@@ -1329,7 +1334,7 @@ public abstract class BeanDeserializerBase
     /**
      * Method called when an explicitly ignored property (one specified with a
      * name to match, either by property annotation or class annotation) is encountered.
-     * 
+     *
      * @since 2.3
      */
     protected void handleIgnoredProperty(JsonParser jp, DeserializationContext ctxt,
@@ -1341,7 +1346,7 @@ public abstract class BeanDeserializerBase
         }
         jp.skipChildren();
     }
-    
+
     /**
      * Method called in cases where we may have polymorphic deserialization
      * case: that is, type of Creator-constructed bean is not the type
@@ -1354,10 +1359,10 @@ public abstract class BeanDeserializerBase
      *   in buffer
      */
     @SuppressWarnings("resource")
-    protected Object handlePolymorphic(JsonParser jp, DeserializationContext ctxt,                                          
+    protected Object handlePolymorphic(JsonParser jp, DeserializationContext ctxt,
             Object bean, TokenBuffer unknownTokens)
         throws IOException, JsonProcessingException
-    {  
+    {
         // First things first: maybe there is a more specific deserializer available?
         JsonDeserializer<Object> subDeser = _findSubclassDeserializer(ctxt, bean, unknownTokens);
         if (subDeser != null) {
@@ -1384,7 +1389,7 @@ public abstract class BeanDeserializerBase
         }
         return bean;
     }
-    
+
     /**
      * Helper method called to (try to) locate deserializer for given sub-type of
      * type that this deserializer handles.
@@ -1392,7 +1397,7 @@ public abstract class BeanDeserializerBase
     protected JsonDeserializer<Object> _findSubclassDeserializer(DeserializationContext ctxt,
             Object bean, TokenBuffer unknownTokens)
         throws IOException, JsonProcessingException
-    {  
+    {
         JsonDeserializer<Object> subDeser;
 
         // First: maybe we have already created sub-type deserializer?
@@ -1418,11 +1423,11 @@ public abstract class BeanDeserializerBase
                     _subDeserializers = new HashMap<ClassKey,JsonDeserializer<Object>>();;
                 }
                 _subDeserializers.put(new ClassKey(bean.getClass()), subDeser);
-            }            
+            }
         }
         return subDeser;
     }
-    
+
     /*
     /**********************************************************
     /* Helper methods for error reporting
@@ -1454,7 +1459,7 @@ public abstract class BeanDeserializerBase
         throw JsonMappingException.wrapWithPath(throwOrReturnThrowable(t, ctxt), bean, index);
     }
 
-    private Throwable throwOrReturnThrowable(Throwable t, DeserializationContext ctxt) 
+    private Throwable throwOrReturnThrowable(Throwable t, DeserializationContext ctxt)
         throws IOException
     {
         /* 05-Mar-2009, tatu: But one nasty edge is when we get

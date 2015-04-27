@@ -32,7 +32,7 @@ import com.fasterxml.jackson.databind.util.NameTransformer;
  *<p>
  * Note: up until 2.0, this class was an inner class of
  * {@link AnnotationIntrospector}; moved here for convenience.
- * 
+ *
  * @since 2.1
  */
 public class AnnotationIntrospectorPair
@@ -41,7 +41,7 @@ public class AnnotationIntrospectorPair
 {
     private static final long serialVersionUID = 1L;
 
-    protected final AnnotationIntrospector _primary, _secondary;
+    public final AnnotationIntrospector _primary, _secondary;
 
     public AnnotationIntrospectorPair(AnnotationIntrospector p, AnnotationIntrospector s)
     {
@@ -83,14 +83,14 @@ public class AnnotationIntrospectorPair
         _secondary.allIntrospectors(result);
         return result;
     }
-    
+
     // // // Generic annotation properties, lookup
-    
+
     @Override
     public boolean isAnnotationBundle(Annotation ann) {
         return _primary.isAnnotationBundle(ann) || _secondary.isAnnotationBundle(ann);
     }
-    
+
     /*
     /******************************************************
     /* General class annotations
@@ -119,7 +119,7 @@ public class AnnotationIntrospectorPair
         if (result == null) {
             result = _secondary.findPropertiesToIgnore(ac);
         }
-        return result;            
+        return result;
     }
 
     @Override
@@ -130,7 +130,7 @@ public class AnnotationIntrospectorPair
             result = _secondary.findIgnoreUnknownProperties(ac);
         }
         return result;
-    }        
+    }
 
     @Override
     public Boolean isIgnorableType(AnnotatedClass ac)
@@ -162,7 +162,7 @@ public class AnnotationIntrospectorPair
         }
         return id;
     }
-    
+
     @Override
     public Object findNamingStrategy(AnnotatedClass ac)
     {
@@ -178,7 +178,7 @@ public class AnnotationIntrospectorPair
     /* Property auto-detection
     /******************************************************
     */
-    
+
     @Override
     public VisibilityChecker<?> findAutoDetectVisibility(AnnotatedClass ac,
         VisibilityChecker<?> checker)
@@ -195,7 +195,7 @@ public class AnnotationIntrospectorPair
     /* Type handling
     /******************************************************
     */
-    
+
     @Override
     public TypeResolverBuilder<?> findTypeResolver(MapperConfig<?> config,
             AnnotatedClass ac, JavaType baseType)
@@ -228,7 +228,7 @@ public class AnnotationIntrospectorPair
         }
         return b;
     }
-    
+
     @Override
     public List<NamedType> findSubtypes(Annotated a)
     {
@@ -247,20 +247,20 @@ public class AnnotationIntrospectorPair
     {
         String name = _primary.findTypeName(ac);
         if (name == null || name.length() == 0) {
-            name = _secondary.findTypeName(ac);                
+            name = _secondary.findTypeName(ac);
         }
         return name;
     }
-    
+
     // // // General member (field, method/constructor) annotations
-    
-    @Override        
+
+    @Override
     public ReferenceProperty findReferenceType(AnnotatedMember member) {
         ReferenceProperty r = _primary.findReferenceType(member);
         return (r == null) ? _secondary.findReferenceType(member) : r;
     }
 
-    @Override        
+    @Override
     public NameTransformer findUnwrappingNameTransformer(AnnotatedMember member) {
         NameTransformer r = _primary.findUnwrappingNameTransformer(member);
         return (r == null) ? _secondary.findUnwrappingNameTransformer(member) : r;
@@ -276,13 +276,13 @@ public class AnnotationIntrospectorPair
     public boolean hasIgnoreMarker(AnnotatedMember m) {
         return _primary.hasIgnoreMarker(m) || _secondary.hasIgnoreMarker(m);
     }
-    
+
     @Override
     public Boolean hasRequiredMarker(AnnotatedMember m) {
         Boolean r = _primary.hasRequiredMarker(m);
         return (r == null) ? _secondary.hasRequiredMarker(m) : r;
     }
-    
+
     // // // Serialization: general annotations
 
     @Override
@@ -291,7 +291,7 @@ public class AnnotationIntrospectorPair
         return _isExplicitClassOrOb(r, JsonSerializer.None.class)
                 ? r : _secondary.findSerializer(am);
     }
-    
+
     @Override
     public Object findKeySerializer(Annotated a) {
         Object r = _primary.findKeySerializer(a);
@@ -305,14 +305,14 @@ public class AnnotationIntrospectorPair
         return _isExplicitClassOrOb(r, JsonSerializer.None.class)
         		? r : _secondary.findContentSerializer(a);
     }
-    
+
     @Override
     public Object findNullSerializer(Annotated a) {
         Object r = _primary.findNullSerializer(a);
         return _isExplicitClassOrOb(r, JsonSerializer.None.class)
                 ? r : _secondary.findNullSerializer(a);
     }
-    
+
     @Override
     public JsonInclude.Include findSerializationInclusion(Annotated a,
             JsonInclude.Include defValue)
@@ -331,7 +331,7 @@ public class AnnotationIntrospectorPair
         defValue = _primary.findSerializationInclusion(a, defValue);
         return defValue;
     }
-    
+
     @Override
     public Class<?> findSerializationType(Annotated a) {
         Class<?> r = _primary.findSerializationType(a);
@@ -349,7 +349,7 @@ public class AnnotationIntrospectorPair
         Class<?> r = _primary.findSerializationContentType(am, baseType);
         return (r == null) ? _secondary.findSerializationContentType(am, baseType) : r;
     }
-    
+
     @Override
     public JsonSerialize.Typing findSerializationTyping(Annotated a) {
         JsonSerialize.Typing r = _primary.findSerializationTyping(a);
@@ -400,7 +400,7 @@ public class AnnotationIntrospectorPair
         objectIdInfo = _primary.findObjectReferenceInfo(ann, objectIdInfo);
         return objectIdInfo;
     }
-    
+
     @Override
     public JsonFormat.Value findFormat(Annotated ann) {
         JsonFormat.Value r = _primary.findFormat(ann);
@@ -481,7 +481,7 @@ public class AnnotationIntrospectorPair
     }
 
     // // // Serialization: property annotations
-    
+
     @Override
     public PropertyName findNameForSerialization(Annotated a) {
         PropertyName n = _primary.findNameForSerialization(a);
@@ -496,27 +496,29 @@ public class AnnotationIntrospectorPair
         }
         return n;
     }
-    
+
     @Override
     public boolean hasAsValueAnnotation(AnnotatedMethod am) {
         return _primary.hasAsValueAnnotation(am) || _secondary.hasAsValueAnnotation(am);
     }
-    
+
     @Override
     public String findEnumValue(Enum<?> value) {
         String r = _primary.findEnumValue(value);
         return (r == null) ? _secondary.findEnumValue(value) : r;
-    }        
+    }
 
     // // // Deserialization: general annotations
 
     @Override
     public Object findDeserializer(Annotated am) {
         Object r = _primary.findDeserializer(am);
+        System.out.println("findDeserializer : " + _isExplicitClassOrOb(r, JsonDeserializer.None.class));
+        System.out.println("   secondary : " + _secondary.getClass().getName());
         return _isExplicitClassOrOb(r, JsonDeserializer.None.class)
                 ? r : _secondary.findDeserializer(am);
     }
-    
+
     @Override
     public Object findKeyDeserializer(Annotated am) {
         Object r = _primary.findKeyDeserializer(am);
@@ -530,7 +532,7 @@ public class AnnotationIntrospectorPair
         return _isExplicitClassOrOb(r, JsonDeserializer.None.class)
                 ? r : _secondary.findContentDeserializer(am);
     }
-    
+
     @Override
     public Class<?> findDeserializationType(Annotated am, JavaType baseType) {
         Class<?> r = _primary.findDeserializationType(am, baseType);
@@ -560,7 +562,7 @@ public class AnnotationIntrospectorPair
         Object ob = _primary.findDeserializationContentConverter(a);
         return (ob == null) ? _secondary.findDeserializationContentConverter(a) : ob;
     }
-    
+
     // // // Deserialization: class annotations
 
     @Override
@@ -580,7 +582,7 @@ public class AnnotationIntrospectorPair
         JsonPOJOBuilder.Value result = _primary.findPOJOBuilderConfig(ac);
         return (result == null) ? _secondary.findPOJOBuilderConfig(ac) : result;
     }
-    
+
     // // // Deserialization: method annotations
 
     @Override
@@ -598,7 +600,7 @@ public class AnnotationIntrospectorPair
         }
         return n;
     }
-    
+
     @Override
     public boolean hasAnySetterAnnotation(AnnotatedMethod am) {
         return _primary.hasAnySetterAnnotation(am) || _secondary.hasAnySetterAnnotation(am);
@@ -608,7 +610,7 @@ public class AnnotationIntrospectorPair
     public boolean hasAnyGetterAnnotation(AnnotatedMethod am) {
         return _primary.hasAnyGetterAnnotation(am) || _secondary.hasAnyGetterAnnotation(am);
     }
-    
+
     @Override
     public boolean hasCreatorAnnotation(Annotated a) {
         return _primary.hasCreatorAnnotation(a) || _secondary.hasCreatorAnnotation(a);
@@ -622,7 +624,7 @@ public class AnnotationIntrospectorPair
         }
         return _secondary.findCreatorBinding(a);
     }
-    
+
     protected boolean _isExplicitClassOrOb(Object maybeCls, Class<?> implicit) {
         if (maybeCls == null) {
             return false;

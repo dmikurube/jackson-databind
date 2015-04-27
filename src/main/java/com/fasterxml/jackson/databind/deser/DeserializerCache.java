@@ -71,7 +71,7 @@ public final class DeserializerCache
         // TODO: clear out "cheap" cached deserializers?
         return this;
     }
-    
+
     /*
     /**********************************************************
     /* Access to caching aspects
@@ -80,7 +80,7 @@ public final class DeserializerCache
 
     /**
      * Method that can be used to determine how many deserializers this
-     * provider is caching currently 
+     * provider is caching currently
      * (if it does caching: default implementation does)
      * Exact count depends on what kind of deserializers get cached;
      * default implementation caches only dynamically constructed deserializers,
@@ -102,7 +102,7 @@ public final class DeserializerCache
      * configuration changes for mapper than owns the provider.
      */
     public void flushCachedDeserializers() {
-        _cachedDeserializers.clear();       
+        _cachedDeserializers.clear();
     }
 
     /*
@@ -214,7 +214,7 @@ public final class DeserializerCache
     /**
      * Method that will try to create a deserializer for given type,
      * and resolve and cache it if necessary
-     * 
+     *
      * @param ctxt Currently active deserialization context
      * @param type Type of property to deserialize
      */
@@ -308,7 +308,7 @@ public final class DeserializerCache
     /* Helper methods for actual construction of deserializers
     /**********************************************************
      */
-    
+
     /**
      * Method that does the heavy lifting of checking for per-type annotations,
      * find out full type, and figure out which actual factory method
@@ -373,6 +373,7 @@ public final class DeserializerCache
     {
         final DeserializationConfig config = ctxt.getConfig();
         // If not, let's see which factory method to use:
+        System.out.println("+++" + type.toString());
         if (type.isEnumType()) {
             return factory.createEnumDeserializer(ctxt, type, beanDesc);
         }
@@ -406,6 +407,7 @@ public final class DeserializerCache
         if (JsonNode.class.isAssignableFrom(type.getRawClass())) {
             return factory.createTreeDeserializer(config, type, beanDesc);
         }
+        System.out.println("+++ !D");
         return factory.createBeanDeserializer(ctxt, type, beanDesc);
     }
 
@@ -454,7 +456,7 @@ public final class DeserializerCache
             return null;
         }
         return ctxt.converterInstance(a, convDef);
-    }    
+    }
     /**
      * Method called to see if given method has annotations that indicate
      * a more specific type than what the argument specifies.
@@ -514,8 +516,8 @@ public final class DeserializerCache
                         keyType = type.getKeyType(); // just in case it's used below
                     }
                 }
-            }            
-            
+            }
+
             // and finally content class; only applicable to structured types
             Class<?> cc = intr.findDeserializationContentType(a, type.getContentType());
             if (cc != null) {

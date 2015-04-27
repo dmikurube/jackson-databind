@@ -40,11 +40,11 @@ public class StdValueInstantiator
     protected CreatorProperty[] _constructorArguments;
 
     // // // Delegate construction
-    
+
     protected JavaType _delegateType;
     protected AnnotatedWithParams _delegateCreator;
     protected CreatorProperty[] _delegateArguments;
-    
+
     // // // Scalar construction
 
     protected AnnotatedWithParams _fromStringCreator;
@@ -55,7 +55,7 @@ public class StdValueInstantiator
 
     // // // Incomplete creator
     protected AnnotatedParameter  _incompleteParameter;
-    
+
     /*
     /**********************************************************
     /* Life-cycle
@@ -86,7 +86,7 @@ public class StdValueInstantiator
         _delegateType = src._delegateType;
         _delegateCreator = src._delegateCreator;
         _delegateArguments = src._delegateArguments;
-        
+
         _fromStringCreator = src._fromStringCreator;
         _fromIntCreator = src._fromIntCreator;
         _fromLongCreator = src._fromLongCreator;
@@ -134,7 +134,7 @@ public class StdValueInstantiator
     public void configureIncompleteParameter(AnnotatedParameter parameter) {
         _incompleteParameter = parameter;
     }
-    
+
     /*
     /**********************************************************
     /* Public API implementation; metadata
@@ -145,7 +145,7 @@ public class StdValueInstantiator
     public String getValueTypeDesc() {
         return _valueTypeDesc;
     }
-    
+
     @Override
     public boolean canCreateFromString() {
         return (_fromStringCreator != null);
@@ -170,7 +170,7 @@ public class StdValueInstantiator
     public boolean canCreateFromBoolean() {
         return (_fromBooleanCreator != null);
     }
-    
+
     @Override
     public boolean canCreateUsingDefault() {
         return (_defaultCreator != null);
@@ -180,7 +180,7 @@ public class StdValueInstantiator
     public boolean canCreateUsingDelegate() {
         return _delegateType != null;
     }
-    
+
     @Override
     public boolean canCreateFromObjectWith() {
         return (_withArgsCreator != null);
@@ -195,13 +195,13 @@ public class StdValueInstantiator
     public SettableBeanProperty[] getFromObjectArguments(DeserializationConfig config) {
         return _constructorArguments;
     }
-    
+
     /*
     /**********************************************************
     /* Public API implementation; instantiation from JSON Object
     /**********************************************************
      */
-    
+
     @Override
     public Object createUsingDefault(DeserializationContext ctxt) throws IOException
     {
@@ -216,7 +216,7 @@ public class StdValueInstantiator
             throw wrapException(e);
         }
     }
-    
+
     @Override
     public Object createFromObjectWith(DeserializationContext ctxt, Object[] args) throws IOException
     {
@@ -262,13 +262,13 @@ public class StdValueInstantiator
             throw wrapException(e);
         }
     }
-    
+
     /*
     /**********************************************************
     /* Public API implementation; instantiation from JSON scalars
     /**********************************************************
      */
-    
+
     @Override
     public Object createFromString(DeserializationContext ctxt, String value) throws IOException
     {
@@ -283,7 +283,7 @@ public class StdValueInstantiator
         }
         return _createFromStringFallbacks(ctxt, value);
     }
-    
+
     @Override
     public Object createFromInt(DeserializationContext ctxt, int value) throws IOException
     {
@@ -352,7 +352,7 @@ public class StdValueInstantiator
         throw ctxt.mappingException("Can not instantiate value of type "+getValueTypeDesc()
                 +" from Boolean value ("+value+"); no single-boolean/Boolean-arg constructor/factory method");
     }
-    
+
     /*
     /**********************************************************
     /* Extended API: configuration mutators, accessors
@@ -396,5 +396,3 @@ public class StdValueInstantiator
         return new JsonMappingException("Instantiation of "+getValueTypeDesc()+" value failed: "+t.getMessage(), t);
     }
 }
-
-
